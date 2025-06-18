@@ -1,0 +1,17 @@
+
+.nav-box {
+  background-color: lightblue;
+  padding: 10px;
+  border: 2px solid black;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-box a {
+  text-decoration: none;
+  color: darkblue;
+  font-weight: bold;
+}
+
