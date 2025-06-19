@@ -7,22 +7,6 @@
       "designation": "SE",
       "department": "SDE",
       "salary": "100000"
-    },
-    {
-      "id": "39b3",
-      "empno": "6",
-      "name": "Shivani ",
-      "designation": "SE",
-      "department": "SDE",
-      "salary": "100000"
-    },
-    {
-      "id": "9f6b",
-      "empno": "6",
-      "name": "Shivani ",
-      "designation": "SE",
-      "department": "sde",
-      "salary": "1234566"
     }
   ]
 }

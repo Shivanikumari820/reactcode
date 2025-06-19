@@ -13,13 +13,13 @@ const Display = () => {
     loadData();
   }, []);
 
-  // 👇 Total Quantity
+  
   let totalQty = 0;
   let totalNetPrice = 0;
 
   products.forEach((item) => {
-    totalQty += parseInt(item.qty);          // qty = 5
-    totalNetPrice += parseFloat(item.netQty); // netQty = 2000
+    totalQty += parseInt(item.qty);         
+    totalNetPrice += parseFloat(item.netQty); 
   });
 
   return (
