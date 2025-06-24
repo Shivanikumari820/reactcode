@@ -1,20 +1,33 @@
 // todoSlice.jsx
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const todoSlice = createSlice({
-  name: "todo",
+  name: 'todo',
   initialState: {
-    todos: []
+    task: [],
   },
   reducers: {
-    addToTask: (state, action) => {
-      state.todos.push(action.payload); // Fixed 'task' to 'todos'
+    addTask: (state, action) => {
+      state.task.push(action.payload);
     },
-    deleteTask: (state, action) => {
-      state.todos.splice(action.payload, 1); // Delete by index = remove by at particular index
-    }
-  }
+    removeTask: (state, action) => {
+      state.task = state.task.filter((t) => t.id !== action.payload);
+    },
+    markAsComplete: (state, action) => {
+      const index = state.task.findIndex((t) => t.id === action.payload);
+      if (index !== -1) {
+        state.task[index].status =
+          state.task[index].status === 'complete' ? 'incomplete' : 'complete';
+      }
+    },
+    editTask: (state, action) => {
+      const index = state.task.findIndex((t) => t.id === action.payload.id);
+      if (index !== -1) {
+        state.task[index].work = action.payload.work;
+      }
+    },
+  },
 });
 
-export const { addToTask, deleteTask } = todoSlice.actions;
+export const { addTask, removeTask, markAsComplete, editTask } = todoSlice.actions;
 export default todoSlice.reducer;

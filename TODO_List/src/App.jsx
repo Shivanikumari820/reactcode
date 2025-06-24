@@ -1,42 +1,86 @@
 // App.jsx
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { addToTask, deleteTask, taskComplete } from './todoSlice';
-import './App.css'; 
+import { useDispatch, useSelector } from 'react-redux';
+import { addTask, removeTask, markAsComplete, editTask } from './todoSlice';
 
-const App = () => {
-  const [txt, setTxt] = useState("");
-  const Data = useSelector((state) => state.todo.todos);
+function App() {
+  const [val, setVal] = useState('');
+  const [editMode, setEditMode] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const Data = useSelector((state) => state.todo.task);
   const dispatch = useDispatch();
+
+  const handleAdd = () => {
+    if (val.trim() !== '') {
+      dispatch(
+        addTask({
+          id: Math.floor(Math.random() * 1000),
+          work: val,
+          status: 'incomplete',
+        })
+      );
+      setVal('');
+    }
+  };
+
+  const handleEdit = () => {
+    if (val.trim() !== '' && editId !== null) {
+      dispatch(editTask({ id: editId, work: val }));
+      setVal('');
+      setEditMode(false);
+      setEditId(null);
+    }
+  };
+
+  const initiateEdit = (task) => {
+    setVal(task.work);
+    setEditMode(true);
+    setEditId(task.id);
+  };
 
   return (
     <>
-      <h1>My Todo List</h1>
-      <div>
-        Enter Task:{" "} <input type="text" value={txt} placeholder="Enter a task" onChange={(e) => setTxt(e.target.value)}   />
-        <button onClick={() => {dispatch(addToTask({ id: Date.now(), work: txt , status : "incomplete"}))}}>Add Task</button>   
-      </div>
+      <h1>Add Task -- </h1>
+      <input
+        type="text"
+        value={val}
+        onChange={(e) => setVal(e.target.value)}
+      />
+      {editMode ? (
+        <button onClick={handleEdit}>Edit</button>
+      ) : (
+        <button onClick={handleAdd}>Add</button>
+      )}
 
-      <hr />
-
-      <table border="1" cellPadding="5" style={{ borderCollapse: 'collapse', width: '60%' }}>
+      <table>
         <thead>
           <tr>
-            <th>S.No</th>
+            <th>S.no</th>
             <th>Task</th>
-            <th>Action</th>
+            <th>Delete</th>
+            <th>Mark Task</th>
+            <th>Edit</th>
           </tr>
         </thead>
         <tbody>
-          {Data.map((item, index) => (       /*This loops through each element in the Data array (which comes from Redux: state.todo.todos). */
-            <tr key={index}>
+          {Data.map((key, index) => (
+            <tr key={key.id}>
               <td>{index + 1}</td>
-              <td>{item.work}</td>
-              <td>
-                <button onClick={() => dispatch(deleteTask(index))}>Delete</button> 
+              <td style={{ color: key.status === 'complete' ? 'red' : 'black' }}>
+                {key.work}
               </td>
-                <td>
-                <button onClick={() => dispatch(taskComplete(key.id))}>Complete</button> 
+              <td>
+                <button onClick={() => dispatch(removeTask(key.id))}>
+                  Delete
+                </button>
+              </td>
+              <td>
+                <button onClick={() => dispatch(markAsComplete(key.id))}>
+                  {key.status === 'complete' ? 'Mark as incomplete' : 'Mark as complete'}
+                </button>
+              </td>
+              <td>
+                <button onClick={() => initiateEdit(key)}>Edit</button>
               </td>
             </tr>
           ))}
@@ -44,6 +88,6 @@ const App = () => {
       </table>
     </>
   );
-};
+}
 
-export default App;
+export default App;
